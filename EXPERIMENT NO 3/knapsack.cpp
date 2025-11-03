@@ -1,0 +1,42 @@
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Item {
+    float profit, weight;
+};
+
+bool compare(Item a, Item b) {
+    return (a.profit / a.weight) > (b.profit / b.weight);
+}
+
+float fractionalKnapsack(vector<Item> &items, float capacity) {
+    sort(items.begin(), items.end(), compare);
+
+    float totalProfit = 0.0;
+
+    for (auto &item : items) {
+        if (capacity >= item.weight) {
+            // Take the whole item
+            capacity -= item.weight;
+            totalProfit += item.profit;
+        } else {
+            // Take fractional part
+            totalProfit += (item.profit / item.weight) * capacity;
+            break;
+        }
+    }
+
+    return totalProfit;
+}
+
+int main() {
+    int n = 3;
+    vector<Item> items = {{60, 10}, {100, 20}, {120, 30}};
+    float capacity = 50;
+
+    cout << "Maximum Profit = " << fractionalKnapsack(items, capacity) << endl;
+    return 0;
+}
